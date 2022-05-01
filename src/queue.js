@@ -16,27 +16,36 @@ const { ListNode } = require('../extensions/list-node.js');
 class Queue {
 
   constructor() {
-    this.queue = [];
+    this.queue = null;
   }
 
   getUnderlyingList() {
-    return this.queue.reverse().reduce(function(acc, val){
-      if (acc) {
-        let newNode = new ListNode(val);
-        newNode.next = acc;
-        return newNode;
-      }
-      return new ListNode(val);
-    }, null);
+    return this.queue;
   }
 
   enqueue(value) {
-    this.queue.push(value);
+
+    let queue = this.queue;
+    if (!queue) {
+      this.queue = new ListNode(value);
+    } else {
+      while (queue.next) {
+        queue = queue.next;
+      }
+
+      queue.next = new ListNode(value, null);
+    }
+
+    //console.log(this.queue);
   }
 
   dequeue() {
-    if (this.queue.length) {
-      return this.queue.splice(0, 1)[0];
+
+    if (this.queue) {
+      let queue = this.queue;
+      let topQueue = queue.value;
+      this.queue = queue.next;
+      return topQueue;
     }
   }
 }
